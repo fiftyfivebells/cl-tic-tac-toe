@@ -47,3 +47,30 @@
   (format t "~& -----------")
   (print-row
    (nth 7 board) (nth 8 board) (nth 9 board)))
+
+
+;; Functions for checking the winner
+
+(defun sum-triplet (board triplet)
+  "Adds the values of given indices in board"
+  (+ (nth (first triplet) board)
+     (nth (second triplet) board)
+     (nth (third triplet) board)))
+
+(defun compute-sums (board)
+  "Finds the sums of the values at each win combo in the board"
+  (mapcar #'(lambda (triplet)
+              (sum-triplet board triplet))
+          *win-combos*))
+
+(defun winner-p (board)
+  "Checks whether any of the win combos add up to 3 or 30, resulting in a win for
+either the opponent or computer"
+  (let ((sums (compute-sums board)))
+    (or (member (* 3 *computer*) sums)
+        (member (* 3 *opponent*) sums))))
+
+(defun board-full-p (board)
+  (not (member 0 board)))
+
+
