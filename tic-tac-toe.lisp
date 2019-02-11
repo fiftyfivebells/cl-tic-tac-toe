@@ -74,3 +74,55 @@ either the opponent or computer"
   (not (member 0 board)))
 
 
+;; Move functions
+
+(defun make-move (player pos board)
+  "Sets given position to the given player's token, then returns the board"
+  (setf (nth pos board) player)
+  board)
+
+(defun opponent-move (board)
+  "Player's move: takes input, checks it's valid, then puts it in the board and
+calls the computer move with the new board"
+  (let* ((pos (read-a-legal-move board))
+         (new-board (make-move
+                     *opponent*
+                     pos
+                     board)))
+    (print-board new-board)
+    (cond ((winner-p new-board) (format t "~&You win!"))
+          ((board-full-p new-board) (format t "~&That's a tie."))
+          (t
+           (computer-move new-board)))))
+
+(defun computer-move (board)
+  "Computer move: runs functions to find best move, makes new board with best move,
+explains the strategy, then runs the opponent move function"
+  (let* ((best-move (choose-best-move board))
+         (pos (first best-move))
+         (strat (second best-move))
+         (new-board (make-move
+                     *computer*
+                     pos
+                     board)))
+    (format t "~&My move: ~S" pos)
+    (format t "~&My strategy: ~A~%~%" strat)
+    (print-board new-board)
+    (cond ((winner-p new-board) (format t "~%I win!"))
+          ((board-full-p new-board) (format t "~%That's a tie."))
+          (t (opponent-move new-board)))))
+
+(defun read-a-legal-move (board)
+  "Confirms that a player's move choice is valid"
+  (format t "~&Your move: ")
+  (let ((pos (read)))
+    (cond ((not (and (integerp pos)
+                     (<= 1 pos 9)))
+           (format t "~&Invalid input.")
+           (read-a-legal-move board))
+          ((not (zerop (nth pos board)))
+           (format t "~&That space is already occupied.")
+           (read-a-legal-move board))
+          (t pos))))
+
+
