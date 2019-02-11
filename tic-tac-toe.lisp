@@ -16,6 +16,9 @@
     (1 4 7) (2 5 8) (3 6 9) ;; cols
     (1 5 9) (3 5 7))) ;; diags
 
+
+;; Game board functions
+
 (defun make-board ()
   "Create list of 0s from 1-9 to represent game board"
   (list 'board 0 0 0 0 0 0 0 0 0))
