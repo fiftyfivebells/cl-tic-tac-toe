@@ -126,3 +126,25 @@ explains the strategy, then runs the opponent move function"
           (t pos))))
 
 
+;; Help computer choose good moves
+
+(defun choose-best-move (board)
+  "Runs through the computer functions to find the best move"
+  (or (make-three-in-a-row board)
+      (block-opponent-win board)
+      (block-opponent-squeeze board)
+      (block-opponent-two-on-one board)
+      (set-up-squeeze board)
+      (random-move-strat board)))
+
+(defun pick-random-empty-position (board)
+  "Choose a random open position in the board"
+  (let ((pos (+ 1 (random 9))))
+    (if (zerop (nth pos board))
+        pos
+        (pick-random-empty-position board))))
+
+(defun random-move-strat (board)
+  (list (pick-random-empty-position board)
+        "random move"))
+
