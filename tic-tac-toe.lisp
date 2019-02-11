@@ -176,3 +176,33 @@ explains the strategy, then runs the opponent move function"
                (zerop (nth pos board)))
            squares))
 
+(defun block-squeeze-play (board)
+  "Blocks an opponent's squeeze attempt by choosing a side square"
+  (let ((combo (find-if
+                #'(lambda (diag)
+                    (and (= (nth 5 board) 10)
+                         (= (sum-triplet board diag) 12)))
+                *diags*)))
+    (when combo
+      (find-empty-position board *sides*))))
+
+(defun block-opponent-squeeze (board)
+  "Checks if there's a squeeze and blocks it"
+  (let ((pos (block-squeeze-play board)))
+    (and pos (list pos "block opponent squeeze"))))
+
+(defun block-two-on-one (board)
+  "Looks for potential two on one and finds move on corner to block"
+  (let ((combo (find-if
+                #'(lambda (diag)
+                    (and (not (= (nth 5 board) 10))
+                         (= (sum-triplet board diag) 12)))
+                *diags*)))
+    (when combo
+      (find-empty-position board *corners*))))
+
+(defun block-opponent-two-on-one (board)
+  "Selects corner square to block two on one"
+  (let ((pos (block-two-on-one board)))
+    (and pos (list pos "block opponent two on one"))))
+
