@@ -206,3 +206,17 @@ explains the strategy, then runs the opponent move function"
   (let ((pos (block-two-on-one board)))
     (and pos (list pos "block opponent two on one"))))
 
+(defun set-up-squeeze (board)
+  "Return best position to set up a squeeze play"
+  (let ((pos (look-for-squeeze board)))
+    (and pos (list pos "looking for squeeze"))))
+
+(defun look-for-squeeze (board)
+  (let ((corner (find-if
+                 #'(lambda (c)
+                    (not (= (nth c board) 0)))
+                 *corners*)))
+    (unless corner
+      (nth (random (length *corners*))
+           *corners*))))
+
