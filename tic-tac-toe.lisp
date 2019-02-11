@@ -220,3 +220,11 @@ explains the strategy, then runs the opponent move function"
       (nth (random (length *corners*))
            *corners*))))
 
+;; Play a game with the computer
+
+(defun play-one-game ()
+  (format t "~&Let's play a game of tic tac toe!~%~%")
+  (if (y-or-n-p "Would you like to go first?")
+      (opponent-move (make-board))
+      (computer-move (make-board))))
+
