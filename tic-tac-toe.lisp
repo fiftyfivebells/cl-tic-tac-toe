@@ -148,3 +148,31 @@ explains the strategy, then runs the opponent move function"
   (list (pick-random-empty-position board)
         "random move"))
 
+(defun make-three-in-a-row (board)
+  "Makes three in a row when the computer gets the opportunity"
+  (let ((pos (win-or-block board
+                           (* 2 *computer*))))
+    (and pos (list pos "make three in a row"))))
+
+(defun block-opponent-win (board)
+  "Blocks the opponents three in a row"
+  (let ((pos (win-or-block board
+                           (* 2 *opponent*))))
+    (and pos (list pos "block opponent"))))
+
+(defun win-or-block (board target-sum)
+  "Decides whether there's an opportunity to win or block and takes it"
+  (let ((combo (find-if
+                #'(lambda (trip)
+                    (equal (sum-triplet board trip)
+                           target-sum))
+                *win-combos*)))
+    (when combo
+      (find-empty-position board combo))))
+
+(defun find-empty-position (board squares)
+  "Finds an empty position to place the next move"
+  (find-if #'(lambda (pos)
+               (zerop (nth pos board)))
+           squares))
+
