@@ -220,6 +220,19 @@ explains the strategy, then runs the opponent move function"
       (nth (random (length *corners*))
            *corners*))))
 
+(defun computer-first (board)
+  "Chooses a good opening square when the computer moves first"
+  (let* ((moves '(1 3 5 7 9))
+         (pos (nth (random 5) moves)))
+    (when (first-turn-p board)
+      (and pos (list pos "strong opening move")))))
+
+(defun first-turn-p (board)
+  "Returns true if the board is empty, ie. if it is the first turn"
+  (not (member nil (mapcar (lambda (pos)
+                             (= pos 0))
+                           board))))
+
 ;; Play a game with the computer
 
 (defun play-one-game ()
