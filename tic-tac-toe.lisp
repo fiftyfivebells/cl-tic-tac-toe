@@ -212,13 +212,14 @@ explains the strategy, then runs the opponent move function"
     (and pos (list pos "looking for squeeze"))))
 
 (defun look-for-squeeze (board)
+  "Find opportunity for squeeze play"
   (let ((corner (find-if
                  #'(lambda (c)
-                    (not (= (nth c board) 0)))
-                 *corners*)))
-    (unless corner
-      (nth (random (length *corners*))
-           *corners*))))
+                     (and (= (sum-triplet board c) 11)
+                          (= (nth 5 board) 1)))
+                 *diags*)))
+    (when corner
+      (find-empty-position board corner))))
 
 (defun computer-first (board)
   "Chooses a good opening square when the computer moves first"
